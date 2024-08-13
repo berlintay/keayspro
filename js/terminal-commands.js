@@ -61,6 +61,19 @@ function handleCatFact(term) {
     });
 }
 
+// Handle fetching the README (SVG)
+function handleReadme(term) {
+    $.ajax({
+        url: 'https://raw.githubusercontent.com/berlintay/berlintay/main/github-metrics.svg',
+        success: function(data) {
+            term.echo(data); // Display the raw SVG content as text
+        },
+        error: function() {
+            term.error('Error fetching README.');
+        }
+    });
+}
+
 // Centralized error handling
 function handleError(message, term) {
     term.error(message);
@@ -74,7 +87,7 @@ $(document).ready(function() {
 
         switch (baseCommand) {
             case 'trending':
-                handleTrending(term);
+                handleTrending(term); // Assuming handleTrending is defined elsewhere
                 break;
 
             case 'joke':
