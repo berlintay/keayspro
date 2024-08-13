@@ -1,5 +1,3 @@
-// terminal-commands.js
-
 // Define available themes including new ones
 const themes = [
     'default-theme',
@@ -35,6 +33,39 @@ function handleThemeSwitch(term) {
     switchThemeRandomly(term);
 }
 
+// Handle fetching random jokes
+function handleJoke(term) {
+    $.ajax({
+        url: 'https://official-joke-api.appspot.com/random_joke',
+        dataType: 'json',
+        success: function(response) {
+            term.echo(`${response.setup}\n${response.punchline}`);
+        },
+        error: function() {
+            term.error('Error fetching a joke.');
+        }
+    });
+}
+
+// Handle fetching random cat facts
+function handleCatFact(term) {
+    $.ajax({
+        url: 'https://catfact.ninja/fact',
+        dataType: 'json',
+        success: function(response) {
+            term.echo(`Cat Fact: ${response.fact}`);
+        },
+        error: function() {
+            term.error('Error fetching cat fact.');
+        }
+    });
+}
+
+// Centralized error handling
+function handleError(message, term) {
+    term.error(message);
+}
+
 // Initialize terminal with commands
 $(document).ready(function() {
     $('#terminal').terminal(function(command, term) {
@@ -46,12 +77,12 @@ $(document).ready(function() {
                 handleTrending(term);
                 break;
 
-            case 'reddit':
-                handleReddit(parts[1], term);
+            case 'joke':
+                handleJoke(term);
                 break;
 
-            case 'google':
-                handleGoogleSearch(parts.slice(1).join(' '), term);
+            case 'catfact':
+                handleCatFact(term);
                 break;
 
             case 'readme':
@@ -83,7 +114,7 @@ $(document).ready(function() {
                 break;
 
             case 'help':
-                term.echo('Available commands:\n - trending\n - reddit <feedname>\n - google <query>\n - readme\n - ascii <text>\n - color <color>\n - theme\n - help\n - clear');
+                term.echo('Available commands:\n - trending\n - joke\n - catfact\n - readme\n - ascii <text>\n - color <color>\n - theme\n - help\n - clear');
                 break;
 
             case 'clear':
