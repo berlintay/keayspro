@@ -4,22 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>keays pro</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.23.0/css/jquery.terminal.min.css">
-  <style>
-    body {
-      margin: 0;
-      padding: 20px; /* added padding */
-      font-family: IBM Plex;
-      font-size: 18px;
-      color: #33CCFF;
-      background-color: #2E4053; /* Kanagawa-inspired background color */
-    }
-    #terminal {
-      height: calc(100vh - 40px); /* adjusted height to account for padding */
-      width: 100%;
-      padding: 20px; /* added padding */
-    }
-  </style>
+<link href="bgterminal.css" rel="stylesheet" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript" src="jquery.bgterminal.min.js"></script>
 </head>
 <body>
   <div id="terminal"></div>
@@ -27,6 +14,8 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.23.0/js/jquery.terminal.min.js"></script>
   <script>
+$(document).ready(function(){
+$('#terminal').bgTerminal({
     $(function() {
       $('#terminal').terminal(function(command, term) {
         if (command === 'trending') {
@@ -54,5 +43,132 @@
       });
     });
   </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>keays pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.23.0/css/jquery.terminal.min.css">
+  <link href="css/bgterminal.css" rel="stylesheet" type="text/css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: IBM Plex;
+      font-size: 18px;
+      color: #33CCFF;
+      background-color: #2E4053;
+    }
+    #terminal-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    #terminal {
+      height: calc(100vh - 40px);
+      width: 100%;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="terminal-container"></div>
+  <div id="terminal"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.23.0/js/jquery.terminal.min.js"></script>
+  <script type="text/javascript" src="js/jquery.bgterminal.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#terminal-container').bgterminal({
+        // Background terminal options
+        tapes: [
+          'https://raw.githubusercontent.com/joakimthorensen/jquery.bgterminal/master/tapes/tape1.json',
+          'https://raw.githubusercontent.com/joakimthorensen/jquery.bgterminal/master/tapes/tape2.json',
+          'https://raw.githubusercontent.com/joakimthorensen/jquery.bgterminal/master/tapes/tape3.json'
+        ],
+        speed: 100,
+        tapeLength: 100,
+        emulateSpeed: 20,
+        glitchInterval: 3000,
+        tapeType: 'black',
+        wrapperClass: 'bgterminal-wrapper',
+        containerClass: 'bgterminal-container'
+      });
+
+      $('#terminal').terminal(function(command, term) {
+        if (command === 'trending') {
+          $.ajax({
+            url: 'https://api.github.com/search/repositories?q=created:>2023-08-01&sort=stars&order=desc',
+            dataType: 'json',
+            success: function(response) {
+              var repos = response.items;
+              var output = '';
+              repos.forEach(function(repo, index) {
+                output += `${index + 1}. [${repo.stargazers_count}] ${repo.full_name} - ${repo.description}\n`;
+              });
+              term.echo(output);
+            },
+            error: function() {
+              term.echo('Error fetching GitHub trending repositories.');
+            }
+          });
+        } else {
+          term.echo('Available commands: trending');
+        }
+      }, {
+        greetings: 'Hola amigo, this is my terminal o.O',
+        prompt: '$ '
+      });
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Web Developer Terminal</title>
+    <meta name="Description" content="Web Developer Portfolio Terminal."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/css/style.css?v=b0a58bb8" rel="stylesheet"/>
+</head>
+<body>
+    <section>
+        <article>
+            <div id="term">
+                <div></div>
+            </div>
+            <div id="about">
+                <p class="portrait">
+                  <img alt="Developer Logo" src="https://i.ibb.co/Gt5ww9F/j10k1vdh.png" style="width: 120px; height: 120px;"/>
+                </p>
+            </div>
+        </article>
+    </section>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+    <script>if (window.module) module = window.module;</script>
+    <script src="/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jcubic/static/js/wcwidth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.terminal/js/jquery.terminal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.terminal/js/xml_formatting.js"></script>
+    <script src="https://terminal.jcubic.pl/js/chat.js"></script>
+    <script src="https://terminal.jcubic.pl/js/favico.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sysend"></script>
+    <script src="https://cdn.jsdelivr.net/npm/randomcolor/randomColor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/figlet/lib/figlet.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-auth.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/jquery.terminal/css/jquery.terminal.min.css" rel="stylesheet"/>
+    <script src="/js/terminal.js"></script>
 </body>
 </html>
