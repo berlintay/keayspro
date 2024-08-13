@@ -172,3 +172,95 @@ $('#terminal').bgTerminal({
     <script src="/js/terminal.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>keays pro</title>
+    
+    <!-- jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- jQuery Terminal CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.23.0/css/jquery.terminal.min.css" rel="stylesheet">
+    
+    <!-- jQuery Terminal JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.23.0/js/jquery.terminal.min.js"></script>
+    
+    <!-- Additional JS libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/randomcolor/randomColor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/figlet/lib/figlet.js"></script>
+    
+    <!-- Custom CSS for Terminal -->
+    <link href="css/custom-terminal.css" rel="stylesheet">
+
+</head>
+<body>
+    <div id="terminal"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#terminal').terminal(function(command, term) {
+                var parts = command.split(' ');
+                var baseCommand = parts[0].toLowerCase();
+
+                switch (baseCommand) {
+                    case 'trending':
+                        $.ajax({
+                            url: 'https://api.github.com/search/repositories?q=created:>2023-08-01&sort=stars&order=desc',
+                            dataType: 'json',
+                            success: function(response) {
+                                var repos = response.items;
+                                var output = '';
+                                repos.forEach(function(repo, index) {
+                                    output += `${index + 1}. [${repo.stargazers_count}] ${repo.full_name} - ${repo.description}\n`;
+                                });
+                                term.echo(output);
+                            },
+                            error: function() {
+                                term.echo('Error fetching GitHub trending repositories.');
+                            }
+                        });
+                        break;
+
+                    case 'color':
+                        var color = parts[1];
+                        if (color) {
+                            $('body').css('background-color', color);
+                            term.echo(`Background color changed to ${color}`);
+                        } else {
+                            term.error('Usage: color <color>');
+                        }
+                        break;
+
+                    case 'ascii':
+                        figlet(parts.slice(1).join(' '), function(err, data) {
+                            if (err) {
+                                term.error('Something went wrong with the ASCII art...');
+                                return;
+                            }
+                            term.echo(data);
+                        });
+                        break;
+
+                    case 'help':
+                        term.echo('Available commands:\n - trending\n - color <color>\n - ascii <text>\n - help\n - clear');
+                        break;
+
+                    case 'clear':
+                        term.clear();
+                        break;
+
+                    default:
+                        term.error(`Unknown command: ${baseCommand}. Type 'help' for a list of available commands.`);
+                        break;
+                }
+            }, {
+                greetings: 'Hola amigo, this is my terminal o.O',
+                prompt: '$ '
+            });
+        });
+    </script>
+</body>
+</html>
