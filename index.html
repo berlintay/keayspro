@@ -1,42 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keays Terminal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.34.0/css/jquery.terminal.min.css">
-    <style>
-        body {
-            background-color: #000;
-            color: #00FF00;
-            font-family: monospace;
-        }
-
-        .terminal {
-            margin: 50px auto;
-            width: 80%;
-            height: 500px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>keays pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.23.0/css/jquery.terminal.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px; /* added padding */
+      font-family: IBM Plex;
+      font-size: 18px;
+      color: #33CCFF;
+      background-color: #2E4053; /* Kanagawa-inspired background color */
+    }
+    #terminal {
+      height: calc(100vh - 40px); /* adjusted height to account for padding */
+      width: 100%;
+      padding: 20px; /* added padding */
+    }
+  </style>
 </head>
 <body>
-    <div class="terminal"></div>
+  <div id="terminal"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.34.0/js/jquery.terminal.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.terminal').terminal(function(command, term) {
-                if (command !== '') {
-                    term.echo('You typed: ' + command);
-                } else {
-                    term.echo('');
-                }
-            }, {
-                greetings: 'Welcome to Keays Terminal\nType your command:',
-                prompt: 'keays.pro> '
-            });
-        });
-    </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.23.0/js/jquery.terminal.min.js"></script>
+  <script>
+    $(function() {
+      $('#terminal').terminal(function(command, term) {
+        if (command === 'trending') {
+          $.ajax({
+            url: 'https://api.github.com/search/repositories?q=created:>2023-08-01&sort=stars&order=desc',
+            dataType: 'json',
+            success: function(response) {
+              var repos = response.items;
+              var output = '';
+              repos.forEach(function(repo, index) {
+                output += `${index + 1}. [${repo.stargazers_count}] ${repo.full_name} - ${repo.description}\n`;
+              });
+              term.echo(output);
+            },
+            error: function() {
+              term.echo('Error fetching GitHub trending repositories.');
+            }
+          });
+        } else {
+          term.echo('Available commands: trending');
+        }
+      }, {
+        greetings: 'Hola amigo, this is my terminal o.O',
+        prompt: '$ '
+      });
+    });
+  </script>
 </body>
 </html>
