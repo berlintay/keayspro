@@ -1,67 +1,119 @@
-:root {
-    --bg: #1F1F28;
-    --fg: #DCD7BA;
-    --accent: #7E9CD8;
-    --primary: #2A2A37;
-    --secondary: #A3D4D5;
-    --highlight: #957FB8;
+/* custom-terminal.css */
+
+/* General Terminal Styles */
+body, #terminal {
+    font-size: 24px;
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: var(--bg);
-    color: var(--fg);
-    font-family: 'colaborate-thinregular', sans-serif;
+/* Default Theme */
+body.default-theme {
+    background-color: #2E4053;
+    color: #33CCFF;
 }
 
-article {
-    display: grid;
-    gap: 0 10px;
-    grid-template-columns: 1fr;
-    grid-template-areas: 
-        "terminal"
-        "content";
+#terminal.default-theme {
+    background-color: #2E4053;
+    color: #33CCFF;
 }
 
-#term {
-    grid-area: terminal;
-    max-height: 70vh;
-    background-color: var(--primary);
-    padding: 20px;
-    border-radius: 8px;
+/* Light Theme */
+body.light-theme {
+    background-color: #F0F0F0;
+    color: #333333;
 }
 
-#about {
-    grid-area: content;
-    background-color: var(--secondary);
-    padding: 20px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#terminal.light-theme {
+    background-color: #FFFFFF;
+    color: #333333;
 }
 
-a {
-    color: var(--accent);
-    text-decoration: none;
+/* Dark Theme */
+body.dark-theme {
+    background-color: #1A1A1A;
+    color: #FFFFFF;
 }
 
-a:hover {
-    text-decoration: underline;
+#terminal.dark-theme {
+    background-color: #000000;
+    color: #FFFFFF;
 }
 
-@media (max-width: 900px) {
-    article {
-        display: block;
-    }
-
-    #term {
-        max-height: 50vh;
-    }
-
-    #about {
-        margin-top: 20px;
-    }
+/* Neon Theme */
+body.neon-theme {
+    background-color: #000000;
+    color: #00FF00;
 }
+
+#terminal.neon-theme {
+    background-color: #000000;
+    color: #00FF00;
+}
+
+/* Kanagawa Neovim Theme */
+body.kanagawa-theme {
+    background-color: #1F1F28;
+    color: #DCD7BA;
+}
+
+#terminal.kanagawa-theme {
+    background-color: #1F1F28;
+    color: #DCD7BA;
+}
+
+/* Atom Dark Theme */
+body.atom-dark-theme {
+    background-color: #282C34;
+    color: #ABB2BF;
+}
+
+#terminal.atom-dark-theme {
+    background-color: #282C34;
+    color: #ABB2BF;
+}
+
+/* Gruvbox Dark Theme */
+body.gruvbox-dark-theme {
+    background-color: #282828;
+    color: #EBDBB2;
+}
+
+#terminal.gruvbox-dark-theme {
+    background-color: #282828;
+    color: #EBDBB2;
+}
+
+/* Solarized Light Theme */
+body.solarized-light-theme {
+    background-color: #FDF6E3;
+    color: #657B83;
+}
+
+#terminal.solarized-light-theme {
+    background-color: #FDF6E3;
+    color: #657B83;
+}
+
+/* Dracula Theme */
+body.dracula-theme {
+    background-color: #282A36;
+    color: #F8F8F2;
+}
+
+#terminal.dracula-theme {
+    background-color: #282A36;
+    color: #F8F8F2;
+}
+
+/* Animated Background */
+body.animated-background {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+

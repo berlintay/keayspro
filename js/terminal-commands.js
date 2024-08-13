@@ -10,7 +10,11 @@ const themes = [
     'atom-dark-theme',
     'gruvbox-dark-theme',
     'solarized-light-theme',
-    'dracula-theme'
+    'dracula-theme',
+    'monokai-theme',
+    'nord-theme',
+    'material-theme',
+    'animated-background'
 ];
 
 // Function to switch theme randomly
@@ -23,7 +27,7 @@ function switchThemeRandomly(term) {
 
     $('body').removeClass().addClass(newTheme);
     $('#terminal').removeClass().addClass(newTheme);
-    term.echo(`Switched to ${newTheme.replace('-theme', '')} theme!`);
+    term.echo(`Switched to ${newTheme.replace('-theme', '').replace('-', ' ')} theme!`);
 }
 
 // Handle theme switch
