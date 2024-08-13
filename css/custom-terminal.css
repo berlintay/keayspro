@@ -1,119 +1,44 @@
-/* custom-terminal.css */
-
-/* General Terminal Styles */
-body, #terminal {
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inconsolata', monospace;
     font-size: 24px;
-}
-
-/* Default Theme */
-body.default-theme {
     background-color: #2E4053;
     color: #33CCFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Hide any overflow */
 }
 
-#terminal.default-theme {
+#terminal {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
     background-color: #2E4053;
     color: #33CCFF;
+    font-size: 24px; /* Ensure font size is 24px */
 }
 
-/* Light Theme */
-body.light-theme {
-    background-color: #F0F0F0;
-    color: #333333;
+#terminal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 }
 
-#terminal.light-theme {
-    background-color: #FFFFFF;
-    color: #333333;
+.terminal-wrapper {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto; /* Enable scrolling if needed */
 }
 
-/* Dark Theme */
-body.dark-theme {
-    background-color: #1A1A1A;
-    color: #FFFFFF;
+/* Ensure the terminal has appropriate padding and is centered */
+.terminal-output {
+    padding: 20px;
+    box-sizing: border-box;
 }
-
-#terminal.dark-theme {
-    background-color: #000000;
-    color: #FFFFFF;
-}
-
-/* Neon Theme */
-body.neon-theme {
-    background-color: #000000;
-    color: #00FF00;
-}
-
-#terminal.neon-theme {
-    background-color: #000000;
-    color: #00FF00;
-}
-
-/* Kanagawa Neovim Theme */
-body.kanagawa-theme {
-    background-color: #1F1F28;
-    color: #DCD7BA;
-}
-
-#terminal.kanagawa-theme {
-    background-color: #1F1F28;
-    color: #DCD7BA;
-}
-
-/* Atom Dark Theme */
-body.atom-dark-theme {
-    background-color: #282C34;
-    color: #ABB2BF;
-}
-
-#terminal.atom-dark-theme {
-    background-color: #282C34;
-    color: #ABB2BF;
-}
-
-/* Gruvbox Dark Theme */
-body.gruvbox-dark-theme {
-    background-color: #282828;
-    color: #EBDBB2;
-}
-
-#terminal.gruvbox-dark-theme {
-    background-color: #282828;
-    color: #EBDBB2;
-}
-
-/* Solarized Light Theme */
-body.solarized-light-theme {
-    background-color: #FDF6E3;
-    color: #657B83;
-}
-
-#terminal.solarized-light-theme {
-    background-color: #FDF6E3;
-    color: #657B83;
-}
-
-/* Dracula Theme */
-body.dracula-theme {
-    background-color: #282A36;
-    color: #F8F8F2;
-}
-
-#terminal.dracula-theme {
-    background-color: #282A36;
-    color: #F8F8F2;
-}
-
-/* Animated Background */
-body.animated-background {
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-}
-
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
