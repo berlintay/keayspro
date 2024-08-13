@@ -1,119 +1,34 @@
 // terminal-commands.js
 
-// Handle trending GitHub repositories
-function handleTrending(term) {
-    $.ajax({
-        url: 'https://api.github.com/search/repositories?q=created:>2023-08-01&sort=stars&order=desc',
-        dataType: 'json',
-        success: function(response) {
-            displayGitHubTrending(response, term);
-        },
-        error: function() {
-            handleError('Error fetching GitHub trending repositories.', term);
-        }
-    });
+// Define available themes including new ones
+const themes = [
+    'default-theme',
+    'light-theme',
+    'dark-theme',
+    'neon-theme',
+    'kanagawa-theme',
+    'atom-dark-theme',
+    'gruvbox-dark-theme',
+    'solarized-light-theme',
+    'dracula-theme'
+];
+
+// Function to switch theme randomly
+function switchThemeRandomly(term) {
+    const currentTheme = $('body').attr('class');
+    let newTheme;
+    do {
+        newTheme = themes[Math.floor(Math.random() * themes.length)];
+    } while (newTheme === currentTheme);
+
+    $('body').removeClass().addClass(newTheme);
+    $('#terminal').removeClass().addClass(newTheme);
+    term.echo(`Switched to ${newTheme.replace('-theme', '')} theme!`);
 }
 
-function displayGitHubTrending(response, term) {
-    var repos = response.items;
-    var output = '';
-    repos.forEach(function(repo, index) {
-        output += `${index + 1}. [${repo.stargazers_count}] ${repo.full_name} - ${repo.description}
-`;
-    });
-    term.echo(output);
-}
-
-// Handle Reddit RSS feed
-function handleReddit(feed, term) {
-    if (!feed) {
-        term.error('Usage: reddit <feedname>');
-        return;
-    }
-
-    var feedUrl = `https://reddit.com/r/${feed}.rss`;
-    $.ajax({
-        url: feedUrl,
-        dataType: 'xml',
-        success: function(response) {
-            displayRedditFeed(response, feed, term);
-        },
-        error: function() {
-            handleError('Error fetching Reddit RSS feed.', term);
-        }
-    });
-}
-
-function displayRedditFeed(response, feed, term) {
-    var items = $(response).find('item').slice(0, 10);
-    var output = `Top 10 posts from r/${feed}:
-
-`;
-    items.each(function(index, item) {
-        var title = $(item).find('title').text();
-        var link = $(item).find('link').text();
-        output += `${index + 1}. ${title}
-${link}
-
-`;
-    });
-    term.echo(output);
-}
-
-// Handle Google search
-function handleGoogleSearch(query, term) {
-    if (!query) {
-        term.error('Usage: google <query>');
-        return;
-    }
-
-    term.echo('Searching... Please wait.');
-
-    $.ajax({
-        url: `https://www.googleapis.com/customsearch/v1?key=API_KEY&cx=SEARCH_ENGINE_ID&q=${encodeURIComponent(query)}`,
-        dataType: 'json',
-        success: function(response) {
-            displayGoogleResults(response, term);
-        },
-        error: function() {
-            handleError('Error fetching Google search results.', term);
-        }
-    });
-}
-
-function displayGoogleResults(response, term) {
-    if (response.items && response.items.length > 0) {
-        var output = `Top 10 Google search results:
-
-`;
-        response.items.slice(0, 10).forEach(function(item, index) {
-            output += `${index + 1}. ${item.title}
-${item.link}
-
-`;
-        });
-        term.echo(output);
-    } else {
-        handleError('No results found. Try refining your query.', term);
-    }
-}
-
-// Handle README display from GitHub
-function handleReadme(term) {
-    $.ajax({
-        url: 'https://raw.githubusercontent.com/berlintay/KeaysXYZ/main/README.md',
-        success: function(markdown) {
-            term.echo(markdown);
-        },
-        error: function() {
-            handleError('Error fetching README file.', term);
-        }
-    });
-}
-
-// Centralized error handling
-function handleError(message, term) {
-    term.error(message);
+// Handle theme switch
+function handleThemeSwitch(term) {
+    switchThemeRandomly(term);
 }
 
 // Initialize terminal with commands
@@ -159,16 +74,12 @@ $(document).ready(function() {
                 }
                 break;
 
+            case 'theme':
+                handleThemeSwitch(term);
+                break;
+
             case 'help':
-                term.echo('Available commands:
- - trending
- - reddit <feedname>
- - google <query>
- - readme
- - ascii <text>
- - color <color>
- - help
- - clear');
+                term.echo('Available commands:\n - trending\n - reddit <feedname>\n - google <query>\n - readme\n - ascii <text>\n - color <color>\n - theme\n - help\n - clear');
                 break;
 
             case 'clear':
@@ -184,4 +95,3 @@ $(document).ready(function() {
         prompt: '$ '
     });
 });
-
