@@ -1,6 +1,104 @@
 // terminal-commands.js
 
-// Define available themes including new ones
+// Handle trending GitHub repositories
+function handleTrending(term) {
+    $.ajax({
+        url: 'https://api.github.com/search/repositories?q=created:>2023-08-01&sort=stars&order=desc',
+        dataType: 'json',
+        success: function(response) {
+            var repos = response.items;
+            var output = '';
+            repos.forEach(function(repo, index) {
+                output += `${index + 1}. [${repo.stargazers_count}] ${repo.full_name} - ${repo.description}\n`;
+            });
+            term.echo(output);
+        },
+        error: function() {
+            term.echo('Error fetching GitHub trending repositories.');
+        }
+    });
+}
+
+// Handle Reddit RSS feed
+function handleReddit(feed, term) {
+    if (!feed) {
+        term.error('Usage: reddit <feedname>');
+        return;
+    }
+
+    var feedUrl = `https://reddit.com/r/${feed}.rss`;
+    $.ajax({
+        url: feedUrl,
+        dataType: 'xml',
+        success: function(response) {
+            var items = $(response).find('item').slice(0, 10);
+            var output = `Top 10 posts from r/${feed}:\n\n`;
+            items.each(function(index, item) {
+                var title = $(item).find('title').text();
+                var link = $(item).find('link').text();
+                output += `${index + 1}. ${title}\n${link}\n\n`;
+            });
+            term.echo(output);
+        },
+        error: function() {
+            term.error('Error fetching Reddit RSS feed.');
+        }
+    });
+}
+
+// Handle Google search
+function handleGoogleSearch(query, term) {
+    if (!query) {
+        term.error('Usage: google <query>');
+        return;
+    }
+
+    term.echo('Searching... Please wait.');
+
+    $.ajax({
+        url: `https://www.googleapis.com/customsearch/v1?key=API_KEY&cx=SEARCH_ENGINE_ID&q=${encodeURIComponent(query)}`,
+        dataType: 'json',
+        success: function(response) {
+            if (response.items && response.items.length > 0) {
+                var output = `Top 10 Google search results:\n\n`;
+                response.items.slice(0, 10).forEach(function(item, index) {
+                    output += `${index + 1}. ${item.title}\n${item.link}\n\n`;
+                });
+                term.echo(output);
+            } else {
+                term.error('No results found. Try refining your query.');
+            }
+        },
+        error: function() {
+            term.error('Error fetching Google search results.');
+        }
+    });
+}
+
+// Handle README display from GitHub
+function handleReadme(term) {
+    $.ajax({
+        url: 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/README.md',
+        success: function(markdown) {
+            term.echo(markdown);
+        },
+        error: function() {
+            term.error('Error fetching README file.');
+        }
+    });
+}
+
+// Handle theme switch
+function handleThemeSwitch(term) {
+    switchThemeRandomly(term);
+}
+
+// Centralized error handling
+function handleError(message, term) {
+    term.error(message);
+}
+
+// Function to switch theme randomly
 const themes = [
     'default-theme',
     'light-theme',
@@ -17,7 +115,6 @@ const themes = [
     'animated-background'
 ];
 
-// Function to switch theme randomly
 function switchThemeRandomly(term) {
     const currentTheme = $('body').attr('class');
     let newTheme;
@@ -28,11 +125,6 @@ function switchThemeRandomly(term) {
     $('body').removeClass().addClass(newTheme);
     $('#terminal').removeClass().addClass(newTheme);
     term.echo(`Switched to ${newTheme.replace('-theme', '').replace('-', ' ')} theme!`);
-}
-
-// Handle theme switch
-function handleThemeSwitch(term) {
-    switchThemeRandomly(term);
 }
 
 // Initialize terminal with commands
